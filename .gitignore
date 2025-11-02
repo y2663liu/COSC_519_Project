@@ -76,4 +76,6 @@ crashlytics-build.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/unity
 .vscode
-.idea/.idea.KitchenChaos/.idea
+.idea/
+
+
