@@ -15,7 +15,6 @@ public abstract class ProximityInteractableBase : InteractableBase
         var player = GameObject.FindGameObjectWithTag(PlayerTag);
         if (player != null)
         {
-            Debug.Log("Found player");
             playerTransform = player.transform;
         }
     }
