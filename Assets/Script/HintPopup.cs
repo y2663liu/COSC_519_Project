@@ -6,8 +6,8 @@ public class HintPopup : MonoBehaviour {
 
     [SerializeField] private Canvas popupCanvas;
     [SerializeField] private TMP_Text hintLabel;
-    [SerializeField] private float distanceFromCamera = 1.5f;
-    [SerializeField] private Vector3 offset = new Vector3(0f, -0.25f, 0f);
+    private float distanceFromCamera = 3f;
+    private Vector3 offset = new Vector3(0f, -1f, 0f);
 
     private Transform _currentSource;
 
