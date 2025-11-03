@@ -3,37 +3,34 @@ using UnityEngine.EventSystems;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
-public class HoverClueBase : InteractableBase {
-    [SerializeField] private string hintMessage = "";
+public class HoverClue : InteractableBase {
+    [SerializeField] string title;
+    [SerializeField] string clues;
+    [SerializeField] string funFacts;
 
-    protected virtual string HintMessage => hintMessage;
+    private string HintMessage;
+    
     [SerializeField] XRBaseInteractable rayInteractable;
 
     protected override void Start() {
         base.Start();
-        Debug.Log("PointableClueBase start");
         rayInteractable.hoverEntered.AddListener(OnHoverEntered);
         rayInteractable.hoverExited.AddListener(OnHoverExited);
+        HintMessage = title + '\n' + clues + '\n' + funFacts;
     }
 
-    public void OnHoverEntered(HoverEnterEventArgs args)
-    {
-        if (!IsEnabled)
-        {
-            Debug.Log("unable");
+    public void OnHoverEntered(HoverEnterEventArgs args) {
+        if (!IsEnabled) {
             return;
         }
-        Debug.Log("able");
         HintPopup.Instance?.ShowHint(HintMessage, transform);
     }
 
-    public void OnHoverExited(HoverExitEventArgs args)
-    {
+    public void OnHoverExited(HoverExitEventArgs args) {
         HintPopup.Instance?.HideHint(transform);
     }
 
-    protected override void OnDisable()
-    {
+    protected override void OnDisable() {
         base.OnDisable();
         if (HintPopup.Instance != null)
         {
