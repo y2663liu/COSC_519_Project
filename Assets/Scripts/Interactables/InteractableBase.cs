@@ -1,7 +1,7 @@
 using UnityEngine;
 
 public class InteractableBase : MonoBehaviour {
-    private GameStateManager.GameStage currentStage = GameStateManager.GameStage.Searching; // TODO: change to Intro after debugging
+    private GameStateManager.GameStage currentStage = GameStateManager.GameStage.Intro;
 
     protected bool IsEnabled => CheckInteractable();
 
