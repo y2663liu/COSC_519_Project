@@ -37,8 +37,7 @@ public class IntroScene : MonoBehaviour
     [SerializeField] private TMP_Text footerLabel;
 
     [Header("Player References")]
-    [SerializeField] private Transform playerRig;
-    [SerializeField] private Transform headTransform;
+    [SerializeField] private Transform playerTransform;
 
     [Header("Locomotion Settings")]
     [SerializeField] private float rotationThresholdDegrees = 45f;
@@ -73,6 +72,8 @@ public class IntroScene : MonoBehaviour
     private InputAction _createdPreviousAction;
 
     private Camera _cachedCamera;
+    
+    private string PlayerTag = "Player";
 
     private void Awake()
     {
@@ -99,6 +100,11 @@ public class IntroScene : MonoBehaviour
         if (gameState != null)
         {
             gameState.SetStage(GameStateManager.GameStage.Intro);
+        }
+        var player = GameObject.FindGameObjectWithTag(PlayerTag);
+        if (player != null)
+        {
+            playerTransform = player.transform;
         }
 
         ShowPage(0);
@@ -343,7 +349,7 @@ public class IntroScene : MonoBehaviour
     private void ShowFinalInstructions()
     {
         _isFinalInstructionShown = true;
-        var anchor = headTransform != null ? headTransform : playerRig;
+        var anchor = playerTransform;
         if (anchor == null)
         {
             anchor = transform;
@@ -557,22 +563,16 @@ public class IntroScene : MonoBehaviour
 
     private Vector3 GetPlayerPosition()
     {
-        if (playerRig != null)
+        if (playerTransform != null)
         {
-            return playerRig.position;
-        }
-
-        if (headTransform != null)
-        {
-            return headTransform.position;
+            return playerTransform.position;
         }
 
         return transform.position;
     }
 
-    private Vector3 GetHorizontalForward()
-    {
-        Transform source = headTransform != null ? headTransform : playerRig;
+    private Vector3 GetHorizontalForward() {
+        Transform source = playerTransform;
         if (source == null)
         {
             return Vector3.forward;
