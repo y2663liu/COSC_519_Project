@@ -7819,23 +7819,23 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1677570936}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5eff882c91cd16b49a4fb445f435dd02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IntroScene
   popupCanvas: {fileID: 1891015328}
-  titleLabel: {fileID: 0}
-  bodyLabel: {fileID: 0}
-  footerLabel: {fileID: 0}
-  playerTransform: {fileID: 0}
+  titleLabel: {fileID: 1942255201}
+  bodyLabel: {fileID: 1578488097}
+  footerLabel: {fileID: 167438603}
+  playerTransform: {fileID: 1677570939}
   rotationThresholdDegrees: 45
   movementDistanceThreshold: 0.5
   teleportDistancePerFrameThreshold: 1.25
   markerDistanceInFront: 3
   markerArrivalDistance: 0.75
   markerVerticalOffset: 0
-  markerPrefab: {fileID: 0}
+  markerPrefab: {fileID: 919132149155446097, guid: efc36976151634bd1a0a3931f0e861bd, type: 3}
   nextPageAction:
     m_UseReference: 0
     m_Action:

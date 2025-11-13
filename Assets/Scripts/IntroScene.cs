@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -29,13 +30,7 @@ public class IntroScene : MonoBehaviour
             this.action = action;
         }
     }
-
-    [Header("UI References")]
-    [SerializeField] private Canvas popupCanvas;
-    [SerializeField] private TMP_Text titleLabel;
-    [SerializeField] private TMP_Text bodyLabel;
-    [SerializeField] private TMP_Text footerLabel;
-
+    
     [Header("Player References")]
     [SerializeField] private Transform playerTransform;
 
@@ -84,13 +79,12 @@ public class IntroScene : MonoBehaviour
     private void OnEnable()
     {
         SubscribeInput();
-        EnableCanvas(true);
     }
 
     private void OnDisable()
     {
         UnsubscribeInput();
-        EnableCanvas(false);
+        HideCanvas();
     }
 
     private void Start()
@@ -113,9 +107,8 @@ public class IntroScene : MonoBehaviour
     private void Update()
     {
         CacheCamera();
-        UpdatePopupTransform();
         EvaluateCurrentAction();
-        TrackMarkerProgress();
+        // TrackMarkerProgress();
 
         _previousRigPosition = GetPlayerPosition();
     }
@@ -288,27 +281,14 @@ public class IntroScene : MonoBehaviour
         {
             return;
         }
-
+        
         _currentPageIndex = Mathf.Clamp(index, 0, _pages.Count - 1);
         var page = _pages[_currentPageIndex];
         _currentAction = page.action;
 
-        if (titleLabel != null)
-        {
-            titleLabel.text = page.title;
-        }
-
-        if (bodyLabel != null)
-        {
-            bodyLabel.text = page.body;
-        }
-
-        if (footerLabel != null)
-        {
-            footerLabel.text = page.action == TutorialAction.None
-                ? "Press A to continue.\nPress B to go back."
-                : "Follow the prompt to continue.";
-        }
+        String footerText = page.action == TutorialAction.None ? "Press A to continue.\nPress B to go back." : "Follow the prompt to continue.";
+        
+        HintPopup.Instance?.ShowHint(page.title, page.body, footerText, transform);
 
         var currentPosition = GetPlayerPosition();
         _previousRigPosition = currentPosition;
@@ -356,21 +336,11 @@ public class IntroScene : MonoBehaviour
         }
 
         ActivateMarker(anchor);
-
-        if (titleLabel != null)
-        {
-            titleLabel.text = "Time for a Walk";
-        }
-
-        if (bodyLabel != null)
-        {
-            bodyLabel.text = "A glowing marker has appeared ahead. Walk over to it to keep up with your pup.";
-        }
-
-        if (footerLabel != null)
-        {
-            footerLabel.text = "Press A to close this window.";
-        }
+        
+        HintPopup.Instance?.ShowHint("Time for a Walk", 
+                                    "A glowing marker has appeared ahead. Walk over to it to keep up with your pup.",
+                                    "Press A to close this window.",
+                                    transform);
 
         var gameState = GameStateManager.Instance;
         if (gameState != null)
@@ -387,15 +357,12 @@ public class IntroScene : MonoBehaviour
         }
 
         _popupClosed = true;
-        EnableCanvas(false);
+        HideCanvas();
     }
 
-    private void EnableCanvas(bool enabled)
+    private void HideCanvas()
     {
-        if (popupCanvas != null)
-        {
-            popupCanvas.enabled = enabled;
-        }
+        HintPopup.Instance?.HideHint(transform);
     }
 
     private void EvaluateCurrentAction()
@@ -454,32 +421,6 @@ public class IntroScene : MonoBehaviour
         {
             AdvancePage();
         }
-    }
-
-    private void UpdatePopupTransform()
-    {
-        if (popupCanvas == null)
-        {
-            return;
-        }
-
-        var cameraTransform = _cachedCamera != null ? _cachedCamera.transform : null;
-        if (cameraTransform == null)
-        {
-            return;
-        }
-
-        var forward = cameraTransform.forward;
-        forward.y = 0f;
-        if (forward.sqrMagnitude < 0.0001f)
-        {
-            forward = cameraTransform.forward;
-        }
-
-        forward.Normalize();
-        var position = cameraTransform.position + forward * 1.75f + Vector3.up * -0.2f;
-        transform.position = position;
-        transform.rotation = Quaternion.LookRotation(forward, Vector3.up);
     }
 
     private void ActivateMarker(Transform anchor)
