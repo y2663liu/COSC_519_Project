@@ -1,4 +1,5 @@
 {
+    "version": 1,
     "name": "InputSystem_Actions",
     "maps": [
         {
@@ -986,6 +987,54 @@
                     "processors": "",
                     "groups": "XR",
                     "action": "TrackedDeviceOrientation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Intro Scene",
+            "id": "102ca915-8bcc-4755-962b-89f46e6a2c33",
+            "actions": [
+                {
+                    "name": "Next Page",
+                    "type": "Button",
+                    "id": "56b3edc3-5694-4daf-aade-4160b10841d6",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Previous Page",
+                    "type": "Button",
+                    "id": "0e9ee2a2-0a52-4977-9d7a-1058919d6032",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "bb522aa4-70f7-4ca6-a893-58e43f55f2ce",
+                    "path": "<XRController>{RightHand}/{PrimaryButton}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Next Page",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "15584cdf-bca5-45f0-8914-320c3a5bbb95",
+                    "path": "<XRController>{RightHand}/{SecondaryButton}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Previous Page",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
