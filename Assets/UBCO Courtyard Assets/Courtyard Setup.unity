@@ -794,7 +794,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 045b6d9912891e74290f14e7dccb125b, type: 3}
       propertyPath: m_Name
-      value: marker
+      value: Map Marker
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7901,10 +7901,8 @@ MonoBehaviour:
   rotationThresholdDegrees: 45
   movementDistanceThreshold: 0.5
   teleportDistancePerFrameThreshold: 1.25
-  markerDistanceInFront: 3
+  sceneMarker: {fileID: 1816732331}
   markerArrivalDistance: 0.75
-  markerVerticalOffset: 0
-  markerPrefab: {fileID: 919132149155446097, guid: efc36976151634bd1a0a3931f0e861bd, type: 3}
   nextPageAction:
     m_UseReference: 1
     m_Action:
@@ -9152,6 +9150,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f577a0598aa61004e9673eaf530f168e, type: 3}
   m_PrefabInstance: {fileID: 1811443007}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1816732331 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 045b6d9912891e74290f14e7dccb125b, type: 3}
+  m_PrefabInstance: {fileID: 150071641}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1847346017
 PrefabInstance:

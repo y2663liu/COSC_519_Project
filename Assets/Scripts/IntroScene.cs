@@ -40,10 +40,8 @@ public class IntroScene : MonoBehaviour
     [SerializeField] private float teleportDistancePerFrameThreshold = 1.25f;
 
     [Header("Marker Settings")]
-    [SerializeField] private float markerDistanceInFront = 3f;
+    [SerializeField] private GameObject sceneMarker;
     [SerializeField] private float markerArrivalDistance = 0.75f;
-    [SerializeField] private float markerVerticalOffset = 0f;
-    [SerializeField] private GameObject markerPrefab;
 
     [Header("Input (optional)")]
     [SerializeField] private InputActionProperty nextPageAction;
@@ -60,8 +58,7 @@ public class IntroScene : MonoBehaviour
     private Vector3 _rotationReferenceForward;
     private Vector3 _movementReferencePosition;
     private Vector3 _previousRigPosition;
-
-    private GameObject _markerInstance;
+    
     private bool _markerActive;
 
     private Camera _cachedCamera;
@@ -98,6 +95,14 @@ public class IntroScene : MonoBehaviour
         {
             playerTransform = player.transform;
         }
+        if (sceneMarker != null)
+        {
+            sceneMarker.SetActive(false);
+            _markerActive = sceneMarker.activeSelf;
+        }
+        else {
+            Debug.LogWarning("IntroScene: No scene marker assigned for the walking tutorial.");
+        }
 
         ShowPage(0);
     }
@@ -106,7 +111,7 @@ public class IntroScene : MonoBehaviour
     {
         CacheCamera();
         EvaluateCurrentAction();
-        // TrackMarkerProgress();
+        TrackMarkerProgress();
 
         _previousRigPosition = GetPlayerPosition();
     }
@@ -273,13 +278,15 @@ public class IntroScene : MonoBehaviour
         {
             anchor = transform;
         }
-
-        ActivateMarker(anchor);
         
-        HintPopup.Instance?.ShowHint("Time for a Walk", 
-                                    "A glowing marker has appeared ahead. Walk over to it to keep up with your pup.",
-                                    "Press A to close this window.",
-                                    transform);
+        // Active Map Marker
+        sceneMarker.SetActive(true);
+        _markerActive = true;
+        
+        HintPopup.Instance?.ShowHint("Time for a Walk",
+            "A glowing marker in the courtyard is highlighting where to go. Walk over to that spot to keep up with your pup.",
+            "Press A to close this window.",
+            transform);
 
         var gameState = GameStateManager.Instance;
         if (gameState != null)
@@ -362,76 +369,27 @@ public class IntroScene : MonoBehaviour
         }
     }
 
-    private void ActivateMarker(Transform anchor)
+    private void ActivateMarker()
     {
-        if (anchor == null)
-        {
-            return;
-        }
-
-        if (_markerInstance == null)
-        {
-            if (markerPrefab != null)
-            {
-                _markerInstance = Instantiate(markerPrefab);
-            }
-            else
-            {
-                _markerInstance = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-                var collider = _markerInstance.GetComponent<Collider>();
-                if (collider != null)
-                {
-                    Destroy(collider);
-                }
-
-                var renderer = _markerInstance.GetComponent<Renderer>();
-                if (renderer != null)
-                {
-                    var material = renderer.material;
-                    material.color = new Color(0.8f, 0.9f, 1f, 0.9f);
-                    renderer.shadowCastingMode = ShadowCastingMode.Off;
-                }
-            }
-        }
-
-        if (_markerInstance != null)
-        {
-            _markerInstance.name = "Tutorial Destination Marker";
-        }
-
-        var forward = anchor.forward;
-        forward.y = 0f;
-        if (forward.sqrMagnitude < 0.001f)
-        {
-            forward = Vector3.forward;
-        }
-
-        forward.Normalize();
-        var targetPosition = anchor.position + forward * markerDistanceInFront;
-        targetPosition.y = anchor.position.y + markerVerticalOffset;
-
-        _markerInstance.transform.position = targetPosition;
-        _markerInstance.transform.localScale = new Vector3(0.4f, 0.05f, 0.4f);
-        _markerInstance.transform.rotation = Quaternion.identity;
-        _markerInstance.SetActive(true);
+        sceneMarker.SetActive(true);
         _markerActive = true;
     }
 
     private void TrackMarkerProgress()
     {
-        if (!_markerActive || _markerInstance == null)
+        if (!_markerActive || sceneMarker == null)
         {
             return;
         }
 
         var playerPosition = GetPlayerPosition();
-        var targetPosition = _markerInstance.transform.position;
+        var targetPosition = sceneMarker.transform.position;
         var distance = Vector2.Distance(new Vector2(playerPosition.x, playerPosition.z),
             new Vector2(targetPosition.x, targetPosition.z));
         if (distance <= markerArrivalDistance)
         {
             _markerActive = false;
-            _markerInstance.SetActive(false);
+            sceneMarker.SetActive(false);
 
             var gameState = GameStateManager.Instance;
             if (gameState != null)
