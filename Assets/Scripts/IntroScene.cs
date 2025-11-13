@@ -63,9 +63,6 @@ public class IntroScene : MonoBehaviour
     private GameObject _markerInstance;
     private bool _markerActive;
 
-    private InputAction _createdNextAction;
-    private InputAction _createdPreviousAction;
-
     private Camera _cachedCamera;
     
     private string PlayerTag = "Player";
@@ -143,96 +140,37 @@ public class IntroScene : MonoBehaviour
     }
 
     private void SubscribeInput()
-    {
-        var next = ResolveNextAction();
-        if (next != null)
+    {   
+        if (nextPageAction.reference != null)
         {
-            next.performed += OnNextActionPerformed;
-            if (!next.enabled)
+            nextPageAction.action.performed += OnNextActionPerformed;
+            if (!nextPageAction.action.enabled) // TODO: test if we can remove them
             {
-                next.Enable();
+                nextPageAction.action.Enable();
             }
         }
-
-        var previous = ResolvePreviousAction();
-        if (previous != null)
+        
+        if (previousPageAction.reference != null)
         {
-            previous.performed += OnPreviousActionPerformed;
-            if (!previous.enabled)
+            previousPageAction.action.performed += OnPreviousActionPerformed;
+            if (!previousPageAction.action.enabled) // TODO: test if we can remove them
             {
-                previous.Enable();
+                previousPageAction.action.Enable();
             }
         }
     }
 
     private void UnsubscribeInput()
     {
-        var next = ResolveNextAction(false);
-        if (next != null)
-        {
-            next.performed -= OnNextActionPerformed;
-        }
-
-        var previous = ResolvePreviousAction(false);
-        if (previous != null)
-        {
-            previous.performed -= OnPreviousActionPerformed;
-        }
-
-        if (nextPageAction.reference == null && _createdNextAction != null)
-        {
-            _createdNextAction.Disable();
-        }
-
-        if (previousPageAction.reference == null && _createdPreviousAction != null)
-        {
-            _createdPreviousAction.Disable();
-        }
-    }
-
-    private InputAction ResolveNextAction(bool createIfNeeded = true)
-    {
         if (nextPageAction.reference != null)
         {
-            return nextPageAction.action;
+            nextPageAction.action.performed -= OnNextActionPerformed;
         }
-
-        if (!createIfNeeded)
-        {
-            return _createdNextAction;
-        }
-
-        if (_createdNextAction == null)
-        {
-            _createdNextAction = new InputAction("TutorialNext");
-            _createdNextAction.AddBinding("<XRController>{RightHand}/{PrimaryButton}");
-            _createdNextAction.AddBinding("<XRController>{LeftHand}/{PrimaryButton}");
-            _createdNextAction.AddBinding("<XRController>{RightHand}/{TriggerButton}");
-        }
-
-        return _createdNextAction;
-    }
-
-    private InputAction ResolvePreviousAction(bool createIfNeeded = true)
-    {
+        
         if (previousPageAction.reference != null)
         {
-            return previousPageAction.action;
+            previousPageAction.action.performed -= OnPreviousActionPerformed;
         }
-
-        if (!createIfNeeded)
-        {
-            return _createdPreviousAction;
-        }
-
-        if (_createdPreviousAction == null)
-        {
-            _createdPreviousAction = new InputAction("TutorialPrevious");
-            _createdPreviousAction.AddBinding("<XRController>{RightHand}/{SecondaryButton}");
-            _createdPreviousAction.AddBinding("<XRController>{LeftHand}/{SecondaryButton}");
-        }
-
-        return _createdPreviousAction;
     }
 
     private void OnNextActionPerformed(InputAction.CallbackContext context)
