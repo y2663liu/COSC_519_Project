@@ -55,6 +55,7 @@ public class IntroScene : MonoBehaviour
     private TutorialAction _currentAction = TutorialAction.None;
     private bool _isFinalInstructionShown;
     private bool _popupClosed;
+    private int _instructionLength = Enum.GetValues(typeof(TutorialAction)).Length - 1; // count how many pages we have for instructions
 
     private Vector3 _rotationReferenceForward;
     private Vector3 _movementReferencePosition;
@@ -65,7 +66,7 @@ public class IntroScene : MonoBehaviour
 
     private Camera _cachedCamera;
     
-    private string PlayerTag = "Player";
+    private string _playerTag = "Player";
 
     private void Awake()
     {
@@ -92,7 +93,7 @@ public class IntroScene : MonoBehaviour
         {
             gameState.SetStage(GameStateManager.GameStage.Intro);
         }
-        var player = GameObject.FindGameObjectWithTag(PlayerTag);
+        var player = GameObject.FindGameObjectWithTag(_playerTag);
         if (player != null)
         {
             playerTransform = player.transform;
@@ -188,7 +189,7 @@ public class IntroScene : MonoBehaviour
                 return;
             }
 
-            if (_currentPageIndex >= 3)
+            if (_currentPageIndex >= _instructionLength)
             {
                 AdvancePage();
             }
@@ -207,7 +208,7 @@ public class IntroScene : MonoBehaviour
             return;
         }
 
-        if (context.performed && _currentPageIndex > 3)
+        if (context.performed && _currentPageIndex > _instructionLength)
         {
             ShowPage(_currentPageIndex - 1);
         }
