@@ -17,8 +17,9 @@ public class DogRunAwayAI : MonoBehaviour
     [SerializeField] private AudioClip barkClip;
     
     [Header("Animation")]
-    [SerializeField] private Animator runAnimator;
-    [SerializeField] private string runTriggerName = "Run";
+    [SerializeField] private Animator animator;
+    private string layerName = "Run";
+    private int _layerIndex = 1;
     
     private float _runTimer;
     private float _currentRunSpeed;
@@ -49,6 +50,12 @@ public class DogRunAwayAI : MonoBehaviour
         manager.OnStageChanged.AddListener(OnStageChanged);
     }
     
+    private void Start() {
+        for (int i = 0; i < animator.layerCount; i++) {
+            animator.SetLayerWeight(i, i == _layerIndex ? 1f : 0f);
+        }
+    }
+    
     private void OnStageChanged(GameStateManager.GameStage newStage)
     {
         if (newStage == GameStateManager.GameStage.DogRanAway) {
@@ -77,7 +84,6 @@ public class DogRunAwayAI : MonoBehaviour
         _runDirection = _runDirection.normalized;
 
         PlayBark();
-        TriggerRunAnimation();
     }
 
 
@@ -115,16 +121,5 @@ public class DogRunAwayAI : MonoBehaviour
         {
             barkAudioSource.Play();
         }
-    }
-
-    private void TriggerRunAnimation()
-    {
-        if (runAnimator == null || string.IsNullOrEmpty(runTriggerName))
-        {
-            return;
-        }
-
-        runAnimator.ResetTrigger(runTriggerName);
-        runAnimator.SetTrigger(runTriggerName);
     }
 }

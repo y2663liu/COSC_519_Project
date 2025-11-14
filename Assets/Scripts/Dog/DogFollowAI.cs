@@ -16,8 +16,11 @@ public class DogFollowAI : MonoBehaviour
     [SerializeField] private float rotationSpeed = 6f;
 
     [Header("Animation")]
-    [SerializeField] private Animator walkAnimator;
-    private const string IS_WALKING = "IsWalking";
+    [SerializeField] private Animator animator;
+    private string layerName = "Walk";
+    private int _layerIndex = 0;
+    
+    private const string IsWalking = "IsWalking";
     
     private bool _isMoving;
 
@@ -39,13 +42,20 @@ public class DogFollowAI : MonoBehaviour
         }
         
         manager.OnStageChanged.AddListener(OnStageChanged);
+        
+        if (!animator) animator = GetComponent<Animator>();
+    }
+
+    private void Start() {
+        for (int i = 0; i < animator.layerCount; i++) {
+            animator.SetLayerWeight(i, i == _layerIndex ? 1f : 0f);
+        }
     }
 
     private void Update()
     {
         FollowPlayer();
-        walkAnimator = GetComponent<Animator>();
-        walkAnimator.SetBool(IS_WALKING, _isMoving);
+        animator.SetBool(IsWalking, _isMoving);
     }
 
     private void OnStageChanged(GameStateManager.GameStage newStage)

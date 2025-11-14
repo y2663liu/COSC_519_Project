@@ -3926,7 +3926,7 @@ MonoBehaviour:
   followHeightOffset: 0
   followSpeed: 3
   rotationSpeed: 6
-  walkAnimator: {fileID: 901340585}
+  animator: {fileID: 901340585}
 --- !u!95 &901340585
 Animator:
   serializedVersion: 7
@@ -3968,8 +3968,7 @@ MonoBehaviour:
   rotationSpeed: 6
   barkAudioSource: {fileID: 0}
   barkClip: {fileID: 0}
-  runAnimator: {fileID: 0}
-  runTriggerName: Run
+  animator: {fileID: 901340585}
 --- !u!1001 &950284714
 PrefabInstance:
   m_ObjectHideFlags: 0
