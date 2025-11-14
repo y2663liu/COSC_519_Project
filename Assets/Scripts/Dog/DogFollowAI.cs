@@ -20,7 +20,10 @@ public class DogFollowAI : MonoBehaviour
     [SerializeField] private AudioClip barkClip;
 
     [Header("Animation")]
-    [SerializeField] private Animator animator;
+    [SerializeField] private Animator walkAnimator;
+    private const string IS_WALKING = "IsWalking";
+    
+    [SerializeField] private Animator runAnimator;
     [SerializeField] private string runTriggerName = "Run";
 
     private GameStateManager _gameState;
@@ -32,8 +35,6 @@ public class DogFollowAI : MonoBehaviour
     private bool _isMoving;
 
     private const string PlayerTag = "Player";
-    
-    private const string IS_WALKING = "IsWalking";
 
     private void Awake()
     {
@@ -73,6 +74,8 @@ public class DogFollowAI : MonoBehaviour
         if (_currentStage == GameStateManager.GameStage.WalkingDog ||
             _currentStage == GameStateManager.GameStage.Intro) {
             FollowPlayer();
+            walkAnimator = GetComponent<Animator>();
+            walkAnimator.SetBool(IS_WALKING, _isMoving);
         }
     }
 
@@ -130,7 +133,7 @@ public class DogFollowAI : MonoBehaviour
         desiredPosition.y = player.position.y + followHeightOffset;
         
         // Move and measure how far we moved this loop
-        _isMoving = transform.position == desiredPosition;
+        _isMoving = transform.position != desiredPosition;
         
         var maxStep = followSpeed * Time.deltaTime;
         transform.position = Vector3.MoveTowards(transform.position, desiredPosition, maxStep);
@@ -210,12 +213,12 @@ public class DogFollowAI : MonoBehaviour
 
     private void TriggerRunAnimation()
     {
-        if (animator == null || string.IsNullOrEmpty(runTriggerName))
+        if (runAnimator == null || string.IsNullOrEmpty(runTriggerName))
         {
             return;
         }
 
-        animator.ResetTrigger(runTriggerName);
-        animator.SetTrigger(runTriggerName);
+        runAnimator.ResetTrigger(runTriggerName);
+        runAnimator.SetTrigger(runTriggerName);
     }
 }

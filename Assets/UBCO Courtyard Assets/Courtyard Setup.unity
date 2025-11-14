@@ -3898,6 +3898,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6669cbafca14c486a9448981d69a6a60, type: 3}
       insertIndex: -1
       addedObject: {fileID: 901340583}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6669cbafca14c486a9448981d69a6a60, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 901340585}
   m_SourcePrefab: {fileID: 100100000, guid: 6669cbafca14c486a9448981d69a6a60, type: 3}
 --- !u!1 &901340582 stripped
 GameObject:
@@ -3931,6 +3934,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DogFollowAI
   player: {fileID: 1677570939}
   followDistance: 1.5
+  followForwardDistance: 2
+  followRightOffset: 1
   followHeightOffset: 0
   followSpeed: 3
   rotationSpeed: 6
@@ -3939,8 +3944,31 @@ MonoBehaviour:
   despawnDelaySeconds: 5
   barkAudioSource: {fileID: 0}
   barkClip: {fileID: 8300000, guid: bb9b95e26bca64d81a04f43789b03bc8, type: 3}
-  animator: {fileID: 0}
+  walkAnimator: {fileID: 0}
+  runAnimator: {fileID: 0}
   runTriggerName: Run
+--- !u!95 &901340585
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 901340582}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 379ae08f8be4cc54dac6add590088e85, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &950284714
 PrefabInstance:
   m_ObjectHideFlags: 0
