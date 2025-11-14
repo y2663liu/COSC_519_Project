@@ -5,6 +5,9 @@ public class DogFollowAI : MonoBehaviour
     [Header("Player Tracking")]
     [SerializeField] private Transform player;
     [SerializeField] private float followDistance = 1.5f;
+    [SerializeField] private float followForwardDistance = 2f; // in front of player
+    [SerializeField] private float followRightOffset     = 10f; // to the player's right
+
     [SerializeField] private float followHeightOffset = 0f;
     [SerializeField] private float followSpeed = 3f;
     [SerializeField] private float rotationSpeed = 6f;
@@ -26,6 +29,7 @@ public class DogFollowAI : MonoBehaviour
     private float _runTimer;
     private float _currentRunSpeed;
     private Vector3 _runDirection = Vector3.forward;
+    private bool _isMoving;
 
     private const string PlayerTag = "Player";
     
@@ -112,13 +116,25 @@ public class DogFollowAI : MonoBehaviour
         {
             return;
         }
-
-        var desiredPosition = player.position + player.forward * followDistance;
+        
+        // Planar forward/right (ignore pitch/roll)
+        Vector3 fwd = player.forward; 
+        fwd.y = 0f;
+        if (fwd.sqrMagnitude < 1e-6f) fwd = Vector3.forward;
+        fwd.Normalize();
+        Vector3 right = Vector3.Cross(Vector3.up, fwd); // player's right on XZ
+        
+        var desiredPosition = player.position
+                              + fwd   * followForwardDistance 
+                              + right * followRightOffset;
         desiredPosition.y = player.position.y + followHeightOffset;
-
+        
+        // Move and measure how far we moved this loop
+        _isMoving = transform.position == desiredPosition;
+        
         var maxStep = followSpeed * Time.deltaTime;
         transform.position = Vector3.MoveTowards(transform.position, desiredPosition, maxStep);
-
+        
         var lookDirection = player.position - transform.position;
         lookDirection.y = 0f;
         if (lookDirection.sqrMagnitude > 0.001f)
