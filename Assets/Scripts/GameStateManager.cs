@@ -5,9 +5,9 @@ using UnityEngine.Events;
 public class GameStateManager : MonoBehaviour {
     public enum GameStage {
         Intro,
-        WalkingDog,
+        WalkWithDog,
         DogRanAway,
-        Searching,
+        Search,
         Reunited
     }
 

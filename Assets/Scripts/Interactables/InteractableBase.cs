@@ -31,6 +31,6 @@ public class InteractableBase : MonoBehaviour {
     }
 
     protected bool CheckInteractable() {
-        return currentStage == GameStateManager.GameStage.Searching;
+        return currentStage == GameStateManager.GameStage.Search;
     }
 }

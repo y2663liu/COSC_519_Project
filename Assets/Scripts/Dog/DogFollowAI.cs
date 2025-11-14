@@ -60,7 +60,7 @@ public class DogFollowAI : MonoBehaviour
 
     private void OnStageChanged(GameStateManager.GameStage newStage)
     {
-        if (newStage == GameStateManager.GameStage.Intro || newStage == GameStateManager.GameStage.WalkingDog) {
+        if (newStage == GameStateManager.GameStage.Intro || newStage == GameStateManager.GameStage.WalkWithDog) {
             enabled = true;
         }
         else {

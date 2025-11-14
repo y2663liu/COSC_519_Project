@@ -15,7 +15,7 @@ public class IntroScene : MonoBehaviour
         Teleport
     }
 
-    [System.Serializable]
+    [Serializable]
     private struct TutorialPage
     {
         public string title;
@@ -43,7 +43,7 @@ public class IntroScene : MonoBehaviour
     [SerializeField] private GameObject sceneMarker;
     [SerializeField] private float markerArrivalDistance = 0.75f;
 
-    [Header("Input (optional)")]
+    [Header("Input")]
     [SerializeField] private InputActionProperty nextPageAction;
     [SerializeField] private InputActionProperty previousPageAction;
 
@@ -291,7 +291,7 @@ public class IntroScene : MonoBehaviour
         var gameState = GameStateManager.Instance;
         if (gameState != null)
         {
-            gameState.SetStage(GameStateManager.GameStage.WalkingDog);
+            gameState.SetStage(GameStateManager.GameStage.WalkWithDog);
         }
     }
 
