@@ -1,87 +1,130 @@
+using System;
 using UnityEngine;
 
-public class DogAI : MonoBehaviour
+public class DogRunAwayAI : MonoBehaviour
 {
-    
+    [Header("Player Tracking")]
     [SerializeField] private Transform player;
+    private const string PlayerTag = "Player";
     
-    private float width = 10f;
-    private float speed   = 6f;
+    [Header("Run Away Behaviour")]
+    [SerializeField] private float runAwaySpeed = 6f;
+    [SerializeField] private float runAwayAcceleration = 4f;
+    [SerializeField] private float despawnDelaySeconds = 5f;
     
-    private float minDistance = 3f;           // keep >= this far
-    private float stopBuffer  = 0.5f;          // little buffer to reduce jitter at the edge
-    private float edgeMargin  = 0.25f;         // keep a small gap from edges
-
-    float groundY; // y value for the dog
-    float minX, maxX, minZ, maxZ; // boundary of the dog
-
-    void Start()
+    [SerializeField] private float rotationSpeed = 6f;
+    [SerializeField] private AudioSource barkAudioSource;
+    [SerializeField] private AudioClip barkClip;
+    
+    [Header("Animation")]
+    [SerializeField] private Animator runAnimator;
+    [SerializeField] private string runTriggerName = "Run";
+    
+    private float _runTimer;
+    private float _currentRunSpeed;
+    private Vector3 _runDirection = Vector3.forward;
+    
+    private void Awake()
     {
-        groundY = transform.position.y;
+        if (player == null)
+        {
+            var playerObject = GameObject.FindGameObjectWithTag(PlayerTag);
+            if (playerObject != null)
+            {
+                player = playerObject.transform;
+            }
+        }
+
+        if (barkAudioSource == null)
+        {
+            barkAudioSource = GetComponent<AudioSource>();
+        }
         
-        float half = Mathf.Max(0f, width * 0.5f);
-        float cx = transform.position.x;
-        float cz = transform.position.z;
-        minX = cx - half;  maxX = cx + half;
-        minZ = cz - half;  maxZ = cz + half;
-    }
-
-    void Update()
-    {
-        Vector2 dogLoc    = new Vector2(transform.position.x, transform.position.z);
-        Vector2 playerLoc = new Vector2(player.position.x,   player.position.z);
-        float d = Vector2.Distance(dogLoc, playerLoc);
-
-        if (d < minDistance)
+        var manager = GameStateManager.Instance;
+        if (manager == null)
         {
-            // Direction away from player (any if overlapping)
-            Vector2 dir = dogLoc - playerLoc;
-            if (dir.sqrMagnitude < 1e-6f) dir = Random.insideUnitCircle;
-            dir.Normalize();
-
-            // Aim just outside the keep-out radius
-            Vector2 desired = playerLoc + dir * (minDistance + stopBuffer);
-
-            // Clamp to our square bounds
-            desired = ClampToArea(desired);
-
-            // If still too close (e.g., player near/inside the square), pick farthest corner
-            if (Vector2.Distance(desired, playerLoc) < minDistance)
-                desired = FarthestCornerFrom(playerLoc);
-
-            // Move (XZ only), keep original Y
-            Vector3 target = new Vector3(desired.x, groundY, desired.y);
-            transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+            return;
+        }
+        
+        manager.OnStageChanged.AddListener(OnStageChanged);
+    }
+    
+    private void OnStageChanged(GameStateManager.GameStage newStage)
+    {
+        if (newStage == GameStateManager.GameStage.DogRanAway) {
+            enabled = true;
+        }
+        else {
+            enabled = false;
         }
     }
 
-    Vector2 ClampToArea(Vector2 p)
-    {
-        float x = Mathf.Clamp(p.x, minX + edgeMargin, maxX - edgeMargin);
-        float z = Mathf.Clamp(p.y, minZ + edgeMargin, maxZ - edgeMargin);
-        return new Vector2(x, z);
-    }
+    void OnEnable() {
+        _runTimer = 0f;
+        _currentRunSpeed = runAwaySpeed;
 
-    Vector2 FarthestCornerFrom(Vector2 point)
-    {
-        Vector2[] corners = GetAreaCorners();
-        float bestD = -1f; Vector2 best = corners[0];
-        foreach (var c in corners)
+        if (player != null)
         {
-            float cd = Vector2.Distance(c, point);
-            if (cd > bestD) { bestD = cd; best = c; }
+            _runDirection = transform.position - player.position;
+            _runDirection.y = 0f;
         }
-        return best;
+
+        if (_runDirection.sqrMagnitude < 0.001f)
+        {
+            _runDirection = transform.forward;
+        }
+
+        _runDirection = _runDirection.normalized;
+
+        PlayBark();
+        TriggerRunAnimation();
     }
 
-    Vector2[] GetAreaCorners()
+
+    private void Update()
     {
-        return new[]
+        _runTimer += Time.deltaTime;
+        _currentRunSpeed += runAwayAcceleration * Time.deltaTime;
+
+        transform.position += _runDirection * (_currentRunSpeed * Time.deltaTime);
+
+        if (_runDirection.sqrMagnitude > 0.001f)
         {
-            new Vector2(minX + edgeMargin, minZ + edgeMargin),
-            new Vector2(minX + edgeMargin, maxZ - edgeMargin),
-            new Vector2(maxX - edgeMargin, minZ + edgeMargin),
-            new Vector2(maxX - edgeMargin, maxZ - edgeMargin)
-        };
+            var targetRotation = Quaternion.LookRotation(_runDirection, Vector3.up);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        }
+
+        if (_runTimer >= despawnDelaySeconds)
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
+    private void PlayBark()
+    {
+        if (barkAudioSource == null)
+        {
+            return;
+        }
+
+        if (barkClip != null)
+        {
+            barkAudioSource.PlayOneShot(barkClip);
+        }
+        else if (!barkAudioSource.isPlaying)
+        {
+            barkAudioSource.Play();
+        }
+    }
+
+    private void TriggerRunAnimation()
+    {
+        if (runAnimator == null || string.IsNullOrEmpty(runTriggerName))
+        {
+            return;
+        }
+
+        runAnimator.ResetTrigger(runTriggerName);
+        runAnimator.SetTrigger(runTriggerName);
     }
 }

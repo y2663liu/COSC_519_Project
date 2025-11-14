@@ -3897,29 +3897,16 @@ PrefabInstance:
       addedObject: {fileID: 901340584}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6669cbafca14c486a9448981d69a6a60, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 901340583}
+      addedObject: {fileID: 901340585}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6669cbafca14c486a9448981d69a6a60, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 901340585}
+      addedObject: {fileID: 901340587}
   m_SourcePrefab: {fileID: 100100000, guid: 6669cbafca14c486a9448981d69a6a60, type: 3}
 --- !u!1 &901340582 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 6669cbafca14c486a9448981d69a6a60, type: 3}
   m_PrefabInstance: {fileID: 901340581}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &901340583
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 901340582}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b0971094f4be9e46bb828b56c2977ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DogAI
-  player: {fileID: 1677570939}
 --- !u!114 &901340584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3939,14 +3926,7 @@ MonoBehaviour:
   followHeightOffset: 0
   followSpeed: 3
   rotationSpeed: 6
-  runAwaySpeed: 6
-  runAwayAcceleration: 4
-  despawnDelaySeconds: 5
-  barkAudioSource: {fileID: 0}
-  barkClip: {fileID: 8300000, guid: bb9b95e26bca64d81a04f43789b03bc8, type: 3}
-  walkAnimator: {fileID: 0}
-  runAnimator: {fileID: 0}
-  runTriggerName: Run
+  walkAnimator: {fileID: 901340585}
 --- !u!95 &901340585
 Animator:
   serializedVersion: 7
@@ -3969,6 +3949,27 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &901340587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 901340582}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0199332fb108e1541a7d1f3de7e025cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DogRunAwayAI
+  player: {fileID: 1677570939}
+  runAwaySpeed: 6
+  runAwayAcceleration: 4
+  despawnDelaySeconds: 5
+  rotationSpeed: 6
+  barkAudioSource: {fileID: 0}
+  barkClip: {fileID: 0}
+  runAnimator: {fileID: 0}
+  runTriggerName: Run
 --- !u!1001 &950284714
 PrefabInstance:
   m_ObjectHideFlags: 0
