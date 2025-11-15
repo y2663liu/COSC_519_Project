@@ -92,8 +92,8 @@ public class DogFollowAI : MonoBehaviour
         
         var maxStep = followSpeed * Time.deltaTime;
         transform.position = Vector3.MoveTowards(transform.position, desiredPosition, maxStep);
-        
-        var lookDirection = player.position - transform.position;
+
+        var lookDirection = fwd;
         lookDirection.y = 0f;
         if (lookDirection.sqrMagnitude > 0.001f)
         {
