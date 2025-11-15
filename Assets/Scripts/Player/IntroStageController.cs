@@ -33,15 +33,12 @@ public class IntroScene : MonoBehaviour
     
     [Header("Player References")]
     [SerializeField] private Transform playerTransform;
+    private const string PlayerTag = "Player";
 
     [Header("Locomotion Settings")]
     [SerializeField] private float rotationThresholdDegrees = 45f;
     [SerializeField] private float movementDistanceThreshold = 0.5f;
     [SerializeField] private float teleportDistancePerFrameThreshold = 1.25f;
-
-    [Header("Marker Settings")]
-    [SerializeField] private GameObject sceneMarker;
-    [SerializeField] private float markerArrivalDistance = 0.75f;
 
     [Header("Input")]
     [SerializeField] private InputActionProperty nextPageAction;
@@ -51,7 +48,6 @@ public class IntroScene : MonoBehaviour
 
     private int _currentPageIndex;
     private TutorialAction _currentAction = TutorialAction.None;
-    private bool _isFinalInstructionShown;
     private bool _popupClosed;
     private int _instructionLength = Enum.GetValues(typeof(TutorialAction)).Length - 1; // count how many pages we have for instructions
 
@@ -59,60 +55,90 @@ public class IntroScene : MonoBehaviour
     private Vector3 _movementReferencePosition;
     private Vector3 _previousRigPosition;
     
-    private bool _markerActive;
-
-    private Camera _cachedCamera;
-    
-    private string _playerTag = "Player";
+    private GameStateManager _gameStateManager;
 
     private void Awake()
     {
         BuildPages();
-        CacheCamera();
+        
+        _gameStateManager = GameStateManager.Instance;
+        if (_gameStateManager != null)
+        {
+            _gameStateManager.OnStageChanged.AddListener(OnStageChanged);
+            OnStageChanged(_gameStateManager.CurrentStage);
+        }
+        else
+        {
+            Debug.LogWarning("IntroStageController: GameStateManager not found in the scene.");
+        }
     }
 
     private void OnEnable()
     {
-        SubscribeInput();
+        if (nextPageAction.reference != null)
+        {
+            nextPageAction.action.performed += OnNextActionPerformed;
+            if (!nextPageAction.action.enabled) // TODO: test if we can remove them
+            {
+                nextPageAction.action.Enable();
+            }
+        }
+        
+        if (previousPageAction.reference != null)
+        {
+            previousPageAction.action.performed += OnPreviousActionPerformed;
+            if (!previousPageAction.action.enabled) // TODO: test if we can remove them
+            {
+                previousPageAction.action.Enable();
+            }
+        }
     }
 
     private void OnDisable()
     {
-        UnsubscribeInput();
-        HideCanvas();
+        if (nextPageAction.reference != null)
+        {
+            nextPageAction.action.performed -= OnNextActionPerformed;
+        }
+        
+        if (previousPageAction.reference != null)
+        {
+            previousPageAction.action.performed -= OnPreviousActionPerformed;
+        }
+        
+        HintPopup.Instance?.HideHint(transform);
     }
 
     private void Start()
     {
-        _previousRigPosition = GetPlayerPosition();
-        var gameState = GameStateManager.Instance;
-        if (gameState != null)
+        if (_gameStateManager != null &&
+            _gameStateManager.CurrentStage != GameStateManager.GameStage.Intro)
         {
-            gameState.SetStage(GameStateManager.GameStage.Intro);
+            _gameStateManager.SetStage(GameStateManager.GameStage.Intro);
         }
-        var player = GameObject.FindGameObjectWithTag(_playerTag);
+        
+        var player = GameObject.FindGameObjectWithTag(PlayerTag);
         if (player != null)
         {
             playerTransform = player.transform;
         }
-        if (sceneMarker != null)
-        {
-            sceneMarker.SetActive(false);
-            _markerActive = sceneMarker.activeSelf;
-        }
-        else {
-            Debug.LogWarning("IntroScene: No scene marker assigned for the walking tutorial.");
-        }
+        _previousRigPosition = GetPlayerPosition();
 
         ShowPage(0);
+    }
+    
+    private void OnStageChanged(GameStateManager.GameStage newStage)
+    {
+        bool shouldEnable = newStage == GameStateManager.GameStage.Intro;
+        if (enabled != shouldEnable)
+        {
+            enabled = shouldEnable;
+        }
     }
 
     private void Update()
     {
-        CacheCamera();
         EvaluateCurrentAction();
-        TrackMarkerProgress();
-
         _previousRigPosition = GetPlayerPosition();
     }
 
@@ -145,55 +171,15 @@ public class IntroScene : MonoBehaviour
             TutorialAction.None));
     }
 
-    private void SubscribeInput()
-    {   
-        if (nextPageAction.reference != null)
-        {
-            nextPageAction.action.performed += OnNextActionPerformed;
-            if (!nextPageAction.action.enabled) // TODO: test if we can remove them
-            {
-                nextPageAction.action.Enable();
-            }
-        }
-        
-        if (previousPageAction.reference != null)
-        {
-            previousPageAction.action.performed += OnPreviousActionPerformed;
-            if (!previousPageAction.action.enabled) // TODO: test if we can remove them
-            {
-                previousPageAction.action.Enable();
-            }
-        }
-    }
-
-    private void UnsubscribeInput()
-    {
-        if (nextPageAction.reference != null)
-        {
-            nextPageAction.action.performed -= OnNextActionPerformed;
-        }
-        
-        if (previousPageAction.reference != null)
-        {
-            previousPageAction.action.performed -= OnPreviousActionPerformed;
-        }
-    }
-
     private void OnNextActionPerformed(InputAction.CallbackContext context)
     {
-        if (!enabled || _popupClosed)
+        if (!enabled)
         {
             return;
         }
 
         if (context.performed)
         {
-            if (_isFinalInstructionShown)
-            {
-                ClosePopup();
-                return;
-            }
-
             if (_currentPageIndex >= _instructionLength)
             {
                 AdvancePage();
@@ -204,11 +190,6 @@ public class IntroScene : MonoBehaviour
     private void OnPreviousActionPerformed(InputAction.CallbackContext context)
     {
         if (!enabled || _popupClosed)
-        {
-            return;
-        }
-
-        if (_isFinalInstructionShown)
         {
             return;
         }
@@ -252,72 +233,22 @@ public class IntroScene : MonoBehaviour
         }
     }
 
-    private void AdvancePage()
-    {
-        if (_isFinalInstructionShown)
-        {
-            return;
-        }
-
+    private void AdvancePage() {
         var nextIndex = _currentPageIndex + 1;
-        if (nextIndex < _pages.Count)
-        {
+        if (nextIndex < _pages.Count) {
             ShowPage(nextIndex);
         }
-        else
-        {
-            ShowFinalInstructions();
+        else {
+            HintPopup.Instance?.HideHint(transform);
+            var gameState = GameStateManager.Instance;
+            if (gameState != null) {
+                gameState.SetStage(GameStateManager.GameStage.WalkWithDog);
+            }
         }
-    }
-
-    private void ShowFinalInstructions()
-    {
-        _isFinalInstructionShown = true;
-        var anchor = playerTransform;
-        if (anchor == null)
-        {
-            anchor = transform;
-        }
-        
-        // Active Map Marker
-        sceneMarker.SetActive(true);
-        _markerActive = true;
-        
-        HintPopup.Instance?.ShowHint("Time for a Walk",
-            "A glowing marker in the courtyard is highlighting where to go. Walk over to that spot to keep up with your pup.",
-            "Press A to close this window.",
-            transform);
-
-        var gameState = GameStateManager.Instance;
-        if (gameState != null)
-        {
-            gameState.SetStage(GameStateManager.GameStage.WalkWithDog);
-        }
-    }
-
-    private void ClosePopup()
-    {
-        if (_popupClosed)
-        {
-            return;
-        }
-
-        _popupClosed = true;
-        HideCanvas();
-    }
-
-    private void HideCanvas()
-    {
-        HintPopup.Instance?.HideHint(transform);
     }
 
     private void EvaluateCurrentAction()
     {
-        if (_isFinalInstructionShown)
-        {
-            return;
-        }
-
         switch (_currentAction)
         {
             case TutorialAction.Rotation:
@@ -369,36 +300,6 @@ public class IntroScene : MonoBehaviour
         }
     }
 
-    private void ActivateMarker()
-    {
-        sceneMarker.SetActive(true);
-        _markerActive = true;
-    }
-
-    private void TrackMarkerProgress()
-    {
-        if (!_markerActive || sceneMarker == null)
-        {
-            return;
-        }
-
-        var playerPosition = GetPlayerPosition();
-        var targetPosition = sceneMarker.transform.position;
-        var distance = Vector2.Distance(new Vector2(playerPosition.x, playerPosition.z),
-            new Vector2(targetPosition.x, targetPosition.z));
-        if (distance <= markerArrivalDistance)
-        {
-            _markerActive = false;
-            sceneMarker.SetActive(false);
-
-            var gameState = GameStateManager.Instance;
-            if (gameState != null)
-            {
-                gameState.SetStage(GameStateManager.GameStage.DogRanAway);
-            }
-        }
-    }
-
     private Vector3 GetPlayerPosition()
     {
         if (playerTransform != null)
@@ -419,18 +320,5 @@ public class IntroScene : MonoBehaviour
         var forward = source.forward;
         forward.y = 0f;
         return forward.normalized;
-    }
-
-    private void CacheCamera()
-    {
-        if (_cachedCamera != null)
-        {
-            return;
-        }
-
-        if (Camera.main != null)
-        {
-            _cachedCamera = Camera.main;
-        }
     }
 }

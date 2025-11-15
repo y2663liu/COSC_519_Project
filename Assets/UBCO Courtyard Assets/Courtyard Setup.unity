@@ -6180,6 +6180,7 @@ GameObject:
   - component: {fileID: 1677570937}
   - component: {fileID: 1677570940}
   - component: {fileID: 1677570941}
+  - component: {fileID: 1677570943}
   - component: {fileID: 1677570942}
   m_Layer: 0
   m_Name: Player
@@ -6287,24 +6288,49 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1677570936}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fed6bb80e51449a478bee15e475d33d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WalkWithDogStageController
+  playerTransform: {fileID: 0}
+  sceneMarker: {fileID: 1816732331}
+  markerArrivalDistance: 0.75
+  closePageAction:
+    m_UseReference: 1
+    m_Action:
+      m_Name: Close Page
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 5728e6ec-f70f-414f-8476-77c1fccbcda8
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 6886313421574052279, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+--- !u!114 &1677570943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1677570936}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5eff882c91cd16b49a4fb445f435dd02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IntroScene
-  playerTransform: {fileID: 1677570939}
+  playerTransform: {fileID: 0}
   rotationThresholdDegrees: 45
   movementDistanceThreshold: 0.5
   teleportDistancePerFrameThreshold: 1.25
-  sceneMarker: {fileID: 1816732331}
-  markerArrivalDistance: 0.75
   nextPageAction:
     m_UseReference: 1
     m_Action:
       m_Name: Next Page
       m_Type: 0
       m_ExpectedControlType: 
-      m_Id: c3ed4e61-d563-4cd4-b105-0c28bce8bc06
+      m_Id: 2d5cb236-305a-43fd-bd38-9ad085d4176b
       m_Processors: 
       m_Interactions: 
       m_SingletonActionBindings: []
@@ -6316,7 +6342,7 @@ MonoBehaviour:
       m_Name: Previous Page
       m_Type: 0
       m_ExpectedControlType: 
-      m_Id: 4d96524f-70a1-4342-a950-2b09acf990d1
+      m_Id: cc1e0def-16ad-4004-9612-4f8f5d721f48
       m_Processors: 
       m_Interactions: 
       m_SingletonActionBindings: []

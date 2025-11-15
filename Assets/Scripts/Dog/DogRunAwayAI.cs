@@ -54,19 +54,7 @@ public class DogRunAwayAI : MonoBehaviour
         for (int i = 0; i < animator.layerCount; i++) {
             animator.SetLayerWeight(i, i == _layerIndex ? 1f : 0f);
         }
-    }
-    
-    private void OnStageChanged(GameStateManager.GameStage newStage)
-    {
-        if (newStage == GameStateManager.GameStage.DogRanAway) {
-            enabled = true;
-        }
-        else {
-            enabled = false;
-        }
-    }
-
-    void OnEnable() {
+        
         _runTimer = 0f;
         _currentRunSpeed = runAwaySpeed;
 
@@ -85,7 +73,16 @@ public class DogRunAwayAI : MonoBehaviour
 
         PlayBark();
     }
-
+    
+    private void OnStageChanged(GameStateManager.GameStage newStage)
+    {
+        if (newStage == GameStateManager.GameStage.DogRanAway) {
+            enabled = true;
+        }
+        else {
+            enabled = false;
+        }
+    }
 
     private void Update()
     {
