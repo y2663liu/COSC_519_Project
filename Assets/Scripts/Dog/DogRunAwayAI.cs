@@ -96,10 +96,10 @@ public class DogRunAwayAI : MonoBehaviour
 
         if (_runTimer >= DespawnDelaySeconds)
         {
-            gameObject.SetActive(false);
             if (_gameStateManager != null) {
                 _gameStateManager.SetStage(GameStateManager.GameStage.Search);
             }
+            gameObject.SetActive(false);
         }
     }
 

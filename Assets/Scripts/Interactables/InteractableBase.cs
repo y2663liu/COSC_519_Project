@@ -1,36 +1,25 @@
 using UnityEngine;
 
 public class InteractableBase : MonoBehaviour {
+    private GameStateManager _gameStateManager;
     private GameStateManager.GameStage currentStage = GameStateManager.GameStage.Intro;
-
-    protected bool IsEnabled => CheckInteractable();
-
-    protected virtual void Start() {
-        var manager = GameStateManager.Instance;
-        if (manager != null) {
-            manager.OnStageChanged.AddListener(HandleStageChanged);
-            manager.OnPlayerMovementStateChanged.AddListener(HandleMovementStateChanged);
-        }
+    
+    private void Awake()
+    {
+        _gameStateManager = GameStateManager.Instance;
+        _gameStateManager.OnStageChanged.AddListener(OnStageChanged);
     }
 
     protected virtual void OnDisable() {
-        var manager = GameStateManager.Instance;
-        if (manager == null) {
-            return;
+        _gameStateManager.OnStageChanged.RemoveListener(OnStageChanged);
+    }
+
+    protected virtual void OnStageChanged(GameStateManager.GameStage stage) {
+        if (stage == GameStateManager.GameStage.Search) {
+            enabled = true;
         }
-
-        manager.OnStageChanged.RemoveListener(HandleStageChanged);
-        manager.OnPlayerMovementStateChanged.RemoveListener(HandleMovementStateChanged);
-    }
-
-    protected virtual void HandleStageChanged(GameStateManager.GameStage stage) {
-        currentStage = stage;
-    }
-
-    protected virtual void HandleMovementStateChanged(bool canMove) {
-    }
-
-    protected bool CheckInteractable() {
-        return currentStage == GameStateManager.GameStage.Search;
+        else {
+            enabled = false;
+        }
     }
 }

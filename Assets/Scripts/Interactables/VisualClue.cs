@@ -12,8 +12,8 @@ public class VisualClue : ProximityInteractableBase
     private readonly List<Color> _originalEmissionColours = new List<Color>();
     private bool _materialsCached;
 
-    protected virtual void Awake()
-    {
+    protected override void Start() {
+        base.Start();
         CacheOriginalColours();
     }
 
