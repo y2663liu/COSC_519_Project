@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 
-public class IntroScene : MonoBehaviour
+public class IntroStageController : MonoBehaviour
 {
     private enum TutorialAction
     {
@@ -32,7 +32,7 @@ public class IntroScene : MonoBehaviour
     }
     
     [Header("Player References")]
-    [SerializeField] private Transform playerTransform;
+    private Transform playerTransform;
     private const string PlayerTag = "Player";
 
     [Header("Locomotion Settings")]
@@ -179,7 +179,7 @@ public class IntroScene : MonoBehaviour
         }
 
         if (context.performed)
-        {
+        {   
             if (_currentPageIndex >= _instructionLength)
             {
                 AdvancePage();

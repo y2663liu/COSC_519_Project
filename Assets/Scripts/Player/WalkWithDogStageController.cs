@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 public class WalkWithDogStageController : MonoBehaviour {
     [Header("Player References")]
-    [SerializeField] private Transform playerTransform;
+    private Transform playerTransform;
     private const string PlayerTag = "Player";
     
     [Header("Map Marker Settings")]
@@ -42,12 +42,14 @@ public class WalkWithDogStageController : MonoBehaviour {
     }
     
     private void Start() {
-        if (sceneMarker != null) {
-            sceneMarker.SetActive(false);
-            _markerActive = sceneMarker.activeSelf;
-        }
-        else {
+        if (sceneMarker == null) {
             Debug.LogWarning("IntroScene: No scene marker assigned for the walking tutorial.");
+        }
+        
+        var player = GameObject.FindGameObjectWithTag(PlayerTag);
+        if (player != null)
+        {
+            playerTransform = player.transform;
         }
         
         ShowFinalInstructions();

@@ -732,6 +732,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Map Marker
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 045b6d9912891e74290f14e7dccb125b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6393,7 +6397,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fed6bb80e51449a478bee15e475d33d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WalkWithDogStageController
-  playerTransform: {fileID: 0}
   sceneMarker: {fileID: 1816732331}
   markerArrivalDistance: 0.75
   closePageAction:
@@ -6420,7 +6423,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5eff882c91cd16b49a4fb445f435dd02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IntroScene
-  playerTransform: {fileID: 0}
   rotationThresholdDegrees: 45
   movementDistanceThreshold: 0.5
   teleportDistancePerFrameThreshold: 1.25
@@ -6430,7 +6432,7 @@ MonoBehaviour:
       m_Name: Next Page
       m_Type: 0
       m_ExpectedControlType: 
-      m_Id: 2d5cb236-305a-43fd-bd38-9ad085d4176b
+      m_Id: 896b45cc-2e08-40bb-8f81-43fc1f2200e6
       m_Processors: 
       m_Interactions: 
       m_SingletonActionBindings: []
@@ -6442,7 +6444,7 @@ MonoBehaviour:
       m_Name: Previous Page
       m_Type: 0
       m_ExpectedControlType: 
-      m_Id: cc1e0def-16ad-4004-9612-4f8f5d721f48
+      m_Id: fa2aae78-5f61-4af1-b8ec-0cd76860cf0e
       m_Processors: 
       m_Interactions: 
       m_SingletonActionBindings: []

@@ -9,7 +9,7 @@ public class DogFollowAI : MonoBehaviour
     [Header("Follow Behaviour")]
     [SerializeField] private float followDistance = 1.5f;
     [SerializeField] private float followForwardDistance = 2f; // in front of player
-    [SerializeField] private float followRightOffset     = 1f; // to the player's right
+    [SerializeField] private float followRightOffset     = 0.5f; // to the player's right
 
     [SerializeField] private float followHeightOffset = 0f;
     [SerializeField] private float followSpeed = 3f;
