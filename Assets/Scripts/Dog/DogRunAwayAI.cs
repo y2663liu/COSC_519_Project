@@ -8,9 +8,9 @@ public class DogRunAwayAI : MonoBehaviour
     private const string PlayerTag = "Player";
     
     [Header("Run Away Behaviour")]
-    [SerializeField] private float runAwaySpeed = 6f;
-    [SerializeField] private float runAwayAcceleration = 4f;
-    [SerializeField] private float despawnDelaySeconds = 5f;
+    private const float RunAwaySpeed = 2f;
+    private const float RunAwayAcceleration = 1f;
+    private const float DespawnDelaySeconds = 5f;
     
     [SerializeField] private float rotationSpeed = 6f;
     [SerializeField] private AudioSource barkAudioSource;
@@ -56,7 +56,7 @@ public class DogRunAwayAI : MonoBehaviour
         }
         
         _runTimer = 0f;
-        _currentRunSpeed = runAwaySpeed;
+        _currentRunSpeed = RunAwaySpeed;
 
         if (player != null)
         {
@@ -87,7 +87,7 @@ public class DogRunAwayAI : MonoBehaviour
     private void Update()
     {
         _runTimer += Time.deltaTime;
-        _currentRunSpeed += runAwayAcceleration * Time.deltaTime;
+        _currentRunSpeed += RunAwayAcceleration * Time.deltaTime;
 
         transform.position += _runDirection * (_currentRunSpeed * Time.deltaTime);
 
@@ -97,7 +97,7 @@ public class DogRunAwayAI : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
         }
 
-        if (_runTimer >= despawnDelaySeconds)
+        if (_runTimer >= DespawnDelaySeconds)
         {
             gameObject.SetActive(false);
         }
