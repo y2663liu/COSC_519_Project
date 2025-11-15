@@ -240,9 +240,9 @@ public class IntroStageController : MonoBehaviour
         }
         else {
             HintPopup.Instance?.HideHint(transform);
-            var gameState = GameStateManager.Instance;
-            if (gameState != null) {
-                gameState.SetStage(GameStateManager.GameStage.WalkWithDog);
+            
+            if (_gameStateManager != null) {
+                _gameStateManager.SetStage(GameStateManager.GameStage.WalkWithDog);
             }
         }
     }

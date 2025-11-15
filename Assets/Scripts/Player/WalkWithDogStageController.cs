@@ -23,7 +23,6 @@ public class WalkWithDogStageController : MonoBehaviour {
         if (_gameStateManager != null)
         {
             _gameStateManager.OnStageChanged.AddListener(OnStageChanged);
-            OnStageChanged(_gameStateManager.CurrentStage);
         }
         else
         {
@@ -118,11 +117,10 @@ public class WalkWithDogStageController : MonoBehaviour {
         {
             _markerActive = false;
             sceneMarker.SetActive(false);
-
-            var gameState = GameStateManager.Instance;
-            if (gameState != null)
+            
+            if (_gameStateManager != null)
             {
-                gameState.SetStage(GameStateManager.GameStage.DogRanAway);
+                _gameStateManager.SetStage(GameStateManager.GameStage.DogRanAway);
             }
         }
     }

@@ -25,6 +25,8 @@ public class DogRunAwayAI : MonoBehaviour
     private float _currentRunSpeed;
     private Vector3 _runDirection = Vector3.forward;
     
+    private GameStateManager _gameStateManager;
+    
     private void Awake()
     {
         if (player == null)
@@ -41,13 +43,8 @@ public class DogRunAwayAI : MonoBehaviour
             barkAudioSource = GetComponent<AudioSource>();
         }
         
-        var manager = GameStateManager.Instance;
-        if (manager == null)
-        {
-            return;
-        }
-        
-        manager.OnStageChanged.AddListener(OnStageChanged);
+        _gameStateManager = GameStateManager.Instance;
+        _gameStateManager.OnStageChanged.AddListener(OnStageChanged);
     }
     
     private void Start() {
@@ -100,6 +97,9 @@ public class DogRunAwayAI : MonoBehaviour
         if (_runTimer >= DespawnDelaySeconds)
         {
             gameObject.SetActive(false);
+            if (_gameStateManager != null) {
+                _gameStateManager.SetStage(GameStateManager.GameStage.Search);
+            }
         }
     }
 
