@@ -12,18 +12,13 @@ public class HoverClue : InteractableBase {
     
     [SerializeField] XRBaseInteractable rayInteractable;
 
-    protected override void Start() {
-        base.Start();
+    protected void Start() {
         rayInteractable.hoverEntered.AddListener(OnHoverEntered);
         rayInteractable.hoverExited.AddListener(OnHoverExited);
-        HintMessage = title + '\n' + clues + '\n' + funFacts;
     }
 
     public void OnHoverEntered(HoverEnterEventArgs args) {
-        if (!IsEnabled) {
-            return;
-        }
-        HintPopup.Instance?.ShowHint(HintMessage, transform);
+        HintPopup.Instance?.ShowHint(title, clues, funFacts, transform);
     }
 
     public void OnHoverExited(HoverExitEventArgs args) {

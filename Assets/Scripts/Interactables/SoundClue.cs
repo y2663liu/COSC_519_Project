@@ -8,8 +8,8 @@ public class SoundClue : ProximityInteractableBase
     [SerializeField] private AudioClip clip;
     private AudioSource audioSource;
 
-    private void Awake()
-    {
+    protected override void Start() {
+        base.Start();
         audioSource = GetComponent<AudioSource>();
         audioSource.playOnAwake = false;
         

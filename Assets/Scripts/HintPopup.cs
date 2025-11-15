@@ -5,7 +5,9 @@ public class HintPopup : MonoBehaviour {
     private static HintPopup _instance;
 
     [SerializeField] private Canvas popupCanvas;
-    [SerializeField] private TMP_Text hintLabel;
+    [SerializeField] private TMP_Text titleLabel;
+    [SerializeField] private TMP_Text bodyLabel;
+    [SerializeField] private TMP_Text footerLabel;
     private float distanceFromCamera = 3f;
     private Vector3 offset = new Vector3(0f, -1f, 0f);
 
@@ -52,11 +54,21 @@ public class HintPopup : MonoBehaviour {
         transform.rotation = Quaternion.LookRotation(forward, mainCamera.transform.up);
     }
 
-    public void ShowHint(string message, Transform source) {
+    public void ShowHint(string title, string body, string footer, Transform source) {
         _currentSource = source;
-        if (hintLabel != null)
+        if (titleLabel != null)
         {
-            hintLabel.text = message;
+            titleLabel.text = title;
+        }
+        
+        if (bodyLabel != null)
+        {
+            bodyLabel.text = body;
+        }
+        
+        if (footerLabel!= null)
+        {
+            footerLabel.text = footer;
         }
 
         if (popupCanvas != null)

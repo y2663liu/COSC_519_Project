@@ -10,7 +10,7 @@ public abstract class ProximityInteractableBase : InteractableBase
     private Transform playerTransform = null;
 
     private bool _isPlayerInside;
-    
+
     protected virtual void Start() {
         var player = GameObject.FindGameObjectWithTag(PlayerTag);
         if (player != null)
@@ -20,7 +20,7 @@ public abstract class ProximityInteractableBase : InteractableBase
     }
     protected virtual void Update()
     {
-        if (!IsEnabled || playerTransform == null)
+        if (playerTransform == null)
         {
             return;
         }

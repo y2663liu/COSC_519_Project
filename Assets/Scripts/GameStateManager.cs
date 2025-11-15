@@ -1,12 +1,13 @@
 using UnityEngine;
 using UnityEngine.Events;
 
+[DefaultExecutionOrder(-1000)] // Make sure this script will run first
 public class GameStateManager : MonoBehaviour {
     public enum GameStage {
         Intro,
-        WalkingDog,
+        WalkWithDog,
         DogRanAway,
-        Searching,
+        Search,
         Reunited
     }
 

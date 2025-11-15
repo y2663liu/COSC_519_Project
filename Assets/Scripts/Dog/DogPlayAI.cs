@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class DogAI : MonoBehaviour
+public class DogPlayAI : MonoBehaviour
 {
     
     [SerializeField] private Transform player;
