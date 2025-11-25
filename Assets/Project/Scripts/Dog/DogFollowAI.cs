@@ -7,13 +7,13 @@ public class DogFollowAI : MonoBehaviour
     private const string PlayerTag = "Player";
     
     [Header("Follow Behaviour")]
-    [SerializeField] private float followDistance = 1.5f;
-    [SerializeField] private float followForwardDistance = 2f; // in front of player
-    [SerializeField] private float followRightOffset     = 0.5f; // to the player's right
+    private float followDistance = 1.5f;
+    private float followForwardDistance = 3f; // in front of player
+    private float followRightOffset     = 0.5f; // to the player's right
 
-    [SerializeField] private float followHeightOffset = 0f;
-    [SerializeField] private float followSpeed = 3f;
-    [SerializeField] private float rotationSpeed = 6f;
+    private float followHeightOffset = 0f;
+    private float followSpeed = 3f;
+    private float rotationSpeed = 6f;
 
     [Header("Animation")]
     [SerializeField] private Animator animator;

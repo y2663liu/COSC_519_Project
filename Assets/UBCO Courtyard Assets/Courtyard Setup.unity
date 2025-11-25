@@ -4996,15 +4996,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 6669cbafca14c486a9448981d69a6a60, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.1
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6669cbafca14c486a9448981d69a6a60, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.1
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6669cbafca14c486a9448981d69a6a60, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.1
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6669cbafca14c486a9448981d69a6a60, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5089,12 +5089,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DogFollowAI
   player: {fileID: 1677570939}
-  followDistance: 1.5
-  followForwardDistance: 2
-  followRightOffset: 1
-  followHeightOffset: 0
-  followSpeed: 3
-  rotationSpeed: 6
   animator: {fileID: 901340585}
 --- !u!95 &901340585
 Animator:
@@ -9809,7 +9803,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0.05}
+  m_AnchoredPosition: {x: 0, y: 0.25}
   m_SizeDelta: {x: 25, y: 17}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1891015326

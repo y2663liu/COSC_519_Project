@@ -57,8 +57,7 @@ public class DogRunAwayAI : MonoBehaviour
 
         if (player != null)
         {
-            _runDirection = transform.position - player.position;
-            _runDirection.y = 0f;
+            _runDirection = new Vector3(0f, 0f, -1f);
         }
 
         if (_runDirection.sqrMagnitude < 0.001f)
