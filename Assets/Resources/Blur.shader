@@ -18,6 +18,8 @@ Shader "Custom/Blur"
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
         #define E 2.71828f
 
+        sampler2D _MainTex;
+
         CBUFFER_START(UnityPerMaterial)
             float4 _MainTex_TexelSize;
         uint _GridSize;
@@ -64,7 +66,7 @@ Shader "Custom/Blur"
             float frag_horizontal (v2f i) : SV_Target
             {
                 float3 col = float3(0.0f, 0.0f, 0.0f);
-                float gridsum = 0.0f;
+                float gridSum = 0.0f;
 
                 int upper = ((_GridSize - 1) / 2);
                 int lower = -upper;
@@ -77,7 +79,7 @@ Shader "Custom/Blur"
                     col += gauss * tex2D(_MainTex, uv).xyz;
                 }
 
-                col /= gridsum;
+                col /= gridSum;
                 return float4(col, 1.0f);
             }
             
@@ -97,7 +99,7 @@ Shader "Custom/Blur"
             float frag_vertical (v2f i) : SV_Target
             {
                 float3 col = float3(0.0f, 0.0f, 0.0f);
-                float gridsum = 0.0f;
+                float gridSum = 0.0f;
 
                 int upper = ((_GridSize - 1) / 2);
                 int lower = -upper;
@@ -110,7 +112,7 @@ Shader "Custom/Blur"
                     col += gauss * tex2D(_MainTex, uv).xyz;
                 }
 
-                col /= gridsum;
+                col /= gridSum;
                 return float4(col, 1.0f);
             }
             

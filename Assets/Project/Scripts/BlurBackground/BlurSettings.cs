@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-[System.Serializable, VolumeComponentMenu("Blue")]
+[System.Serializable, VolumeComponentMenu("Blur")]
 public class BlurSettings : VolumeComponent, IPostProcessComponent
 {
     [Tooltip("Standard deviation (spread) of the blue Grid size is approx. 3x largers.")]
