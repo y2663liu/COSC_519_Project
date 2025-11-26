@@ -4,47 +4,47 @@ Shader "Custom/Blur"
     {
         _MainTex("Texture", 2D) = "white" {}
         _Spread("Standard Deviation (Spread)", Float) = 0
-        _GridSize("Grid Size", Integer) = 1
     }
 
     SubShader
     {
-        Tags {
-            "RenderType" = "Opaque"
-            "RenderPipeline" = "UniversalPipeline" }
+        Tags
+        {
+            "RenderType"     = "Opaque"
+            "RenderPipeline" = "UniversalPipeline"
+        }
 
         HLSLINCLUDE
 
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
         #define E 2.71828f
 
-        sampler2D _MainTex;
+        TEXTURE2D(_MainTex);
+        SAMPLER(sampler_MainTex);
+        float4 _MainTex_TexelSize;
 
         CBUFFER_START(UnityPerMaterial)
-            float4 _MainTex_TexelSize;
-        uint _GridSize;
-        float _Spread;
+            float _Spread;
         CBUFFER_END
 
-        float gaussian(int x)
+        float gaussian(int x, float spread)
         {
-            float sigmaSqu = _Spread * _Spread;
-            return (1 / sqrt(TWO_PI * sigmaSqu)) * pow(E, -(x * x) / (2 * sigmaSqu));
+            float sigmaSqu = spread * spread;
+            return (1.0 / sqrt(TWO_PI * sigmaSqu)) * pow(E, -(x * x) / (2.0 * sigmaSqu));
         }
 
         struct appdata
         {
-            float4 positionOS : SV_Position;
-            float2 uv : TEXCOORD0;
+            float4 positionOS : POSITION;
+            float2 uv         : TEXCOORD0;
         };
 
         struct v2f
         {
-            float4 positionCS : SV_Position;
-            float2 uv : TEXCOORD0;
-            
+            float4 positionCS : SV_POSITION;
+            float2 uv         : TEXCOORD0;
         };
-        
+
         v2f vert(appdata v)
         {
             v2f o;
@@ -53,72 +53,90 @@ Shader "Custom/Blur"
             return o;
         }
 
+        float4 SampleTex(float2 uv)
+        {
+            return SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv);
+        }
+
+        // Compute an odd kernel size based on spread
+        void ComputeKernel(out int lower, out int upper, float spread)
+        {
+            float s = max(spread, 0.0001);
+            int gridSize = (int)ceil(s * 6.0);
+            if ((gridSize & 1) == 0)
+                gridSize++;
+
+            upper = (gridSize - 1) / 2;
+            lower = -upper;
+        }
+
         ENDHLSL
 
+        // -------- Horizontal blur pass (Pass 0) --------
         Pass
         {
             Name "Horizontal"
-            
+
             HLSLPROGRAM
-            #pragma vertex vert
+            #pragma vertex   vert
             #pragma fragment frag_horizontal
 
-            float frag_horizontal (v2f i) : SV_Target
+            float4 frag_horizontal(v2f i) : SV_Target
             {
-                float3 col = float3(0.0f, 0.0f, 0.0f);
-                float gridSum = 0.0f;
+                float3 col     = 0;
+                float  gridSum = 0;
 
-                int upper = ((_GridSize - 1) / 2);
-                int lower = -upper;
+                int upper, lower;
+                ComputeKernel(lower, upper, _Spread);
 
+                [loop]
                 for (int x = lower; x <= upper; ++x)
                 {
-                    float gauss = gaussian(x);
-                    gridSum += gauss;
-                    float2 uv = i.uv + float2(_MainTex_TexelSize.x * x, 0.0f);
-                    col += gauss * tex2D(_MainTex, uv).xyz;
+                    float g = gaussian(x, _Spread);
+                    gridSum += g;
+
+                    float2 uv = i.uv + float2(_MainTex_TexelSize.x * x, 0.0);
+                    col += g * SampleTex(uv).rgb;
                 }
 
-                col /= gridSum;
-                return float4(col, 1.0f);
+                col /= max(gridSum, 1e-5);
+                return float4(col, 1.0);
             }
-            
-            
             ENDHLSL
         }
-            
-        
+
+        // -------- Vertical blur pass (Pass 1) --------
         Pass
         {
             Name "Vertical"
-            
+
             HLSLPROGRAM
-            #pragma vertex vert
+            #pragma vertex   vert
             #pragma fragment frag_vertical
 
-            float frag_vertical (v2f i) : SV_Target
+            float4 frag_vertical(v2f i) : SV_Target
             {
-                float3 col = float3(0.0f, 0.0f, 0.0f);
-                float gridSum = 0.0f;
+                float3 col     = 0;
+                float  gridSum = 0;
 
-                int upper = ((_GridSize - 1) / 2);
-                int lower = -upper;
+                int upper, lower;
+                ComputeKernel(lower, upper, _Spread);
 
+                [loop]
                 for (int y = lower; y <= upper; ++y)
                 {
-                    float gauss = gaussian(y);
-                    gridSum += gauss;
-                    float2 uv = i.uv + float2(0.0f, _MainTex_TexelSize.y * y);
-                    col += gauss * tex2D(_MainTex, uv).xyz;
+                    float g = gaussian(y, _Spread);
+                    gridSum += g;
+
+                    float2 uv = i.uv + float2(0.0, _MainTex_TexelSize.y * y);
+                    col += g * SampleTex(uv).rgb;
                 }
 
-                col /= gridSum;
-                return float4(col, 1.0f);
+                col /= max(gridSum, 1e-5);
+                return float4(col, 1.0);
             }
-            
-            
             ENDHLSL
         }
-
     }
 }
+
