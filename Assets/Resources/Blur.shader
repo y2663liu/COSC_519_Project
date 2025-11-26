@@ -139,4 +139,3 @@ Shader "Custom/Blur"
         }
     }
 }
-

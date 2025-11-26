@@ -54,10 +54,10 @@ public class BlurRenderPass : ScriptableRenderPass
         // Pass spread from volume to shader
         material.SetFloat("_Spread", settings.strength.value);
 
-        // Camera color target (compatibility mode path)
+        // Camera color target (compat mode path)
         RTHandle cameraTargetHandle = cameraData.renderer.cameraColorTargetHandle;
 
-        // Use classic CommandBuffer.Blit so the shader sees _MainTex
+        // classic Blit -> shader gets _MainTex
         RenderTargetIdentifier srcID = cameraTargetHandle.nameID;
         RenderTargetIdentifier tmpID = blurTexture.nameID;
 
@@ -79,6 +79,3 @@ public class BlurRenderPass : ScriptableRenderPass
         }
     }
 }
-
-
-
