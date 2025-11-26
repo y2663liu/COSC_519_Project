@@ -2,10 +2,11 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-[System.Serializable, VolumeComponentMenu("Blur")]
+[System.Serializable, VolumeComponentMenu("Custom/Blur")]
 public class BlurSettings : VolumeComponent, IPostProcessComponent
 {
-    [Tooltip("Standard deviation (spread) of the blue Grid size is approx. 3x largers.")]
+    // Controls blur strength (spread)
+    [Tooltip("Standard deviation (spread) of the blur. Higher values = stronger blur.")]
     public ClampedFloatParameter strength = new ClampedFloatParameter(0.0f, 0.0f, 15.0f);
 
     public bool IsActive()
@@ -17,5 +18,4 @@ public class BlurSettings : VolumeComponent, IPostProcessComponent
     {
         return false;
     }
-    
 }
