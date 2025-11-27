@@ -158,16 +158,20 @@ public class IntroStageController : MonoBehaviour
             "Press and hold the teleport button, aim the arc, and release to teleport.",
             TutorialAction.Teleport));
         _pages.Add(new TutorialPage(
-            "Courtyard Stories",
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum posuere erat in dui consequat.",
+            "Map Interaction",
+            "Use the LEFT controller trigger to emit a ray at the campus map. Hover over each building icon to see where it is located.",
             TutorialAction.None));
         _pages.Add(new TutorialPage(
-            "Old Memories",
-            "Suspendisse potenti. Vivamus et nibh et nisl volutpat tincidunt. Cras vitae nibh non sem pharetra tempor.",
+            "Building Interaction",
+            "When you are near a building, use the LEFT controller trigger to point at it. It will show the building’s name and basic information.",
             TutorialAction.None));
         _pages.Add(new TutorialPage(
-            "A Calm Afternoon",
-            "Integer efficitur, metus sed malesuada egestas, justo sapien gravida nisl, id mattis erat nisl in augue.",
+            "Footprint Clues",
+            "Watch for dog paw clues on the ground. Walk toward highlighted dog paws to reveal hints about where to go next.",
+            TutorialAction.None));
+        _pages.Add(new TutorialPage(
+            "Talk to NPCs",
+            "Some characters can share useful information. Go to NPC to hear what they have seen.",
             TutorialAction.None));
     }
 
