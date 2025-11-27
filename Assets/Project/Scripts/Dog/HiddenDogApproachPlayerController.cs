@@ -252,9 +252,12 @@ public class HiddenDogApproachPlayerController : MonoBehaviour
         // Return to Idle
         SetIsWalking(false);
 
-        // Optional: hook into GameStateManager or UI hint system
-        // GameStateManager.Instance?.SetStage(GameStage.Reunited);
-        // HintPopup.Instance?.ShowHint(...);
+        HintPopup.Instance?.ShowHint(
+            "You found your dog!",
+            "Congratulations! You have reunited with your dog. The adventure in the courtyard is complete.",
+            "Thank you for playing.",
+            transform
+        );
 
         enabled = false;
     }
