@@ -155,7 +155,7 @@ public class IntroStageController : MonoBehaviour
             TutorialAction.Movement));
         _pages.Add(new TutorialPage(
             "Teleport Trial",
-            "Press and hold the teleport button, aim the arc, and release to teleport.",
+            "Push the right joystick forward, aim the arc, and release to teleport.",
             TutorialAction.Teleport));
         _pages.Add(new TutorialPage(
             "Map Interaction",
