@@ -1,24 +1,25 @@
 using TMPro;
 using UnityEngine;
 
-public class HintPopup : MonoBehaviour {
-    private static HintPopup _instance;
+public class TutorialPopup : MonoBehaviour {
+    private static TutorialPopup _instance;
 
     [SerializeField] private Canvas popupCanvas;
     [SerializeField] private TMP_Text titleLabel;
     [SerializeField] private TMP_Text bodyLabel;
     [SerializeField] private TMP_Text footerLabel;
-    private float distanceFromCamera = 3f;
-    private Vector3 offset = new Vector3(0f, -1f, 0f);
+    
+    [SerializeField] private float distanceFromCamera = 3f;
+    [SerializeField] private Vector3 offset = new Vector3(0f, -1f, 0f);
 
     private Transform _currentSource;
 
-    public static HintPopup Instance {
+    public static TutorialPopup Instance {
         get
         {
             if (_instance == null)
             {
-                _instance = FindObjectOfType<HintPopup>();
+                _instance = FindObjectOfType<TutorialPopup>();
             }
 
             return _instance;
@@ -56,17 +57,18 @@ public class HintPopup : MonoBehaviour {
 
     public void ShowHint(string title, string body, string footer, Transform source) {
         _currentSource = source;
+
         if (titleLabel != null)
         {
             titleLabel.text = title;
         }
-        
+
         if (bodyLabel != null)
         {
             bodyLabel.text = body;
         }
-        
-        if (footerLabel!= null)
+
+        if (footerLabel != null)
         {
             footerLabel.text = footer;
         }
@@ -74,12 +76,6 @@ public class HintPopup : MonoBehaviour {
         if (popupCanvas != null)
         {
             popupCanvas.enabled = true;
-        }
-        
-        // When the map hint appears, hide the tutorial UI
-        if (TutorialPopup.Instance != null)
-        {
-            TutorialPopup.Instance.HideAll();
         }
     }
 
@@ -90,11 +86,13 @@ public class HintPopup : MonoBehaviour {
         }
 
         HideImmediate();
-        
-        //
-        var tutorial = FindObjectOfType<HintStageController>();
-        tutorial?.RedisplayCurrentPage();
     }
+    
+    public void HideAll()
+    {
+        HideImmediate();
+    }
+
 
     private void HideImmediate() {
         _currentSource = null;

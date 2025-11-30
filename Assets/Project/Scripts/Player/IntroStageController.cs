@@ -106,7 +106,7 @@ public class IntroStageController : MonoBehaviour
             previousPageAction.action.performed -= OnPreviousActionPerformed;
         }
         
-        HintPopup.Instance?.HideHint(transform);
+        TutorialPopup.Instance?.HideHint(transform);
     }
 
     private void Start()
@@ -157,22 +157,6 @@ public class IntroStageController : MonoBehaviour
             "Teleport Trial",
             "Press and hold the teleport button, aim the arc, and release to teleport.",
             TutorialAction.Teleport));
-        _pages.Add(new TutorialPage(
-            "Map Interaction",
-            "Use the LEFT controller trigger to emit a ray at the campus map. Hover over each building icon to see where it is located.",
-            TutorialAction.None));
-        _pages.Add(new TutorialPage(
-            "Building Interaction",
-            "When you are near a building, use the LEFT controller trigger to point at it. It will show the building’s name and basic information.",
-            TutorialAction.None));
-        _pages.Add(new TutorialPage(
-            "Footprint Clues",
-            "Watch for dog paw clues on the ground. Walk toward highlighted dog paws to reveal hints about where to go next.",
-            TutorialAction.None));
-        _pages.Add(new TutorialPage(
-            "Talk to NPCs",
-            "Some characters can share useful information. Go to NPC to hear what they have seen.",
-            TutorialAction.None));
     }
 
     private void OnNextActionPerformed(InputAction.CallbackContext context)
@@ -217,7 +201,7 @@ public class IntroStageController : MonoBehaviour
 
         String footerText = page.action == TutorialAction.None ? "Press A to continue.\nPress B to go back." : "Follow the prompt to continue.";
         
-        HintPopup.Instance?.ShowHint(page.title, page.body, footerText, transform);
+        TutorialPopup.Instance?.ShowHint(page.title, page.body, footerText, transform);
 
         var currentPosition = GetPlayerPosition();
         _previousRigPosition = currentPosition;
@@ -243,7 +227,7 @@ public class IntroStageController : MonoBehaviour
             ShowPage(nextIndex);
         }
         else {
-            HintPopup.Instance?.HideHint(transform);
+            TutorialPopup.Instance?.HideHint(transform);
             
             if (_gameStateManager != null) {
                 _gameStateManager.SetStage(GameStateManager.GameStage.WalkWithDog);
