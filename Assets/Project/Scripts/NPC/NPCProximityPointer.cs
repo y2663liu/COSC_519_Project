@@ -10,10 +10,10 @@ public class NPCProximityPointer : ProximityInteractableBase
     public bool useTalkingAnimation = true;
     public string talkingBool = "isTalking";
 
-    [Header("NPC Dialogue")]
-    [SerializeField] private string npcTitle = "Friendly NPC";
-    [SerializeField] [TextArea] private string npcMessage = "Hello! I saw your dog running that way!";
-    [SerializeField] private string npcFooter = "Press A/X to continue";
+    //[Header("NPC Dialogue")]
+    //[SerializeField] private string npcTitle = "Friendly NPC";
+    //[SerializeField] [TextArea] private string npcMessage = "Hello! I saw your dog running that way!";
+    //[SerializeField] private string npcFooter = "Press A/X to continue";
 
     protected override void OnPlayerEnteredRange()
     {
@@ -26,7 +26,7 @@ public class NPCProximityPointer : ProximityInteractableBase
             animator.SetBool(talkingBool, true);
 
         // Show hint popup
-        HintPopup.Instance?.ShowHint(npcTitle, npcMessage, npcFooter, transform);
+        //HintPopup.Instance?.ShowHint(npcTitle, npcMessage, npcFooter, transform);
     }
 
     protected override void OnPlayerExitedRange()
