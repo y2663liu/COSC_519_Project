@@ -174,7 +174,7 @@ public class HintStageController : MonoBehaviour
             "Building Interaction",
             "When you are near a building, use the LEFT controller trigger to point at it. It will show the building’s name and basic information."));
         _pages.Add(new HintPage(
-            "Footprint Clues",
+            "Paw Prints Clues",
             "Watch for dog paw clues on the ground. Walk toward highlighted dog paws to reveal hints about where to go next."));
         _pages.Add(new HintPage(
             "Talk to NPCs",
