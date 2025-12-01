@@ -1,0 +1,2 @@
+/Users/mahdieh/Desktop/UBC/Courses/IMTC_O 505_Fundamentals of Immersive Technologies/Project/COSC_519_Project/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp/CMakeLists.txt
+/Users/mahdieh/Desktop/UBC/Courses/IMTC_O 505_Fundamentals of Immersive Technologies/Project/COSC_519_Project/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp/GameActivity/CMakeLists.txt
