@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public abstract class ProximityInteractableBase : InteractableBase
@@ -38,6 +39,11 @@ public abstract class ProximityInteractableBase : InteractableBase
         }
     }
 
+    protected override void OnDisable() {
+        base.OnDisable();
+    }
+
     protected abstract void OnPlayerEnteredRange();
     protected abstract void OnPlayerExitedRange();
+    
 }

@@ -16,6 +16,12 @@ public class SoundClue : ProximityInteractableBase
         audioSource.spatialBlend = 1f;
         audioSource.rolloffMode = AudioRolloffMode.Logarithmic;
     }
+    
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        if (loopSoundWhileNearby) audioSource.Stop();
+    }
 
     protected override void OnPlayerEnteredRange()
     {
