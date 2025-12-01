@@ -65,7 +65,7 @@ public class WalkWithDogStageController : MonoBehaviour {
             closePageAction.action.performed -= OnCloseActionPerformed;
         }
         
-        HintPopup.Instance?.HideHint(transform);
+        TutorialPopup.Instance?.HideHint(transform);
     }
     
     private void OnStageChanged(GameStateManager.GameStage newStage)
@@ -86,7 +86,7 @@ public class WalkWithDogStageController : MonoBehaviour {
 
         if (context.performed)
         {
-            HintPopup.Instance?.HideHint(transform);
+            TutorialPopup.Instance?.HideHint(transform);
         }
     }
 
@@ -96,7 +96,7 @@ public class WalkWithDogStageController : MonoBehaviour {
         sceneMarker.SetActive(true);
         _markerActive = true;
         
-        HintPopup.Instance?.ShowHint("Time for a Walk",
+        TutorialPopup.Instance?.ShowHint("Time for a Walk",
             "A glowing marker in the courtyard is highlighting where to go. Walk over to that spot to keep up with your pup.",
             "Press A to close this window.",
             transform);
