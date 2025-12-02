@@ -33,6 +33,8 @@ public class HiddenDogApproachPlayerController : MonoBehaviour
     [Header("Audio")]
     public AudioSource barkSource;
     public AudioClip barkClip;
+    
+    private GameStateManager _gameStateManager;
 
     // Private state
     private bool _hasStarted;          // Whether the full sequence has started
@@ -74,6 +76,9 @@ public class HiddenDogApproachPlayerController : MonoBehaviour
 
         // Start in Idle animation
         SetIsWalking(false);
+        
+        _gameStateManager = GameStateManager.Instance;
+        // TODO: Add _gameStateManager.OnStageChanged.AddListener(OnStageChanged); to prevent user finding the dog before Search Stage
     }
 
     /// <summary>
@@ -135,6 +140,9 @@ public class HiddenDogApproachPlayerController : MonoBehaviour
         {
             // Reached revealPoint
             _reachedReveal = true;
+            if (_gameStateManager != null) {
+                _gameStateManager.SetStage(GameStateManager.GameStage.Reunited);
+            }
             StartCircleAtReveal();
         }
     }
