@@ -4,15 +4,11 @@ using UnityEngine.InputSystem;
 public class NPCDialogueSitStand : ProximityInteractableBase
 {
     [Header("Dialogue")]
-    [TextArea] public string[] messages;   // List of messages
-    private int index = 0;
+    [TextArea] public string messages;   // messages
 
     [Header("Animator")]
     public Animator animator;              // NPC Animator (optional)
     public string sitBool = "isSitting";   // Animator bool for sitting animation
-
-    [Header("Input")]
-    public InputActionProperty nextMessageAction;   // B button
 
     private bool playerInside = false;
     private Transform player;
@@ -21,16 +17,6 @@ public class NPCDialogueSitStand : ProximityInteractableBase
     {
         base.Start();
         player = GameObject.FindGameObjectWithTag("Player").transform;
-    }
-
-    private void OnEnable()
-    {
-        nextMessageAction.action.performed += OnNextMessage;
-    }
-
-    private void OnDisable()
-    {
-        nextMessageAction.action.performed -= OnNextMessage;
     }
 
     protected override void OnPlayerEnteredRange()
@@ -44,9 +30,12 @@ public class NPCDialogueSitStand : ProximityInteractableBase
         if (animator != null)
             animator.SetBool(sitBool, false);
 
-        // Start dialogue
-        index = 0;
-        ShowMessage(index);
+        HintPopup.Instance?.ShowHint(
+            "NPC",
+            messages,
+            "",
+            transform
+        );
     }
 
     protected override void OnPlayerExitedRange()
@@ -58,39 +47,6 @@ public class NPCDialogueSitStand : ProximityInteractableBase
         // Sit back down
         if (animator != null)
             animator.SetBool(sitBool, true);
-    }
-
-    private void OnNextMessage(InputAction.CallbackContext ctx)
-    {
-        if (!playerInside) return;
-
-        index++;
-
-        // If more messages remain → show next
-        if (index < messages.Length)
-        {
-            FacePlayer();
-            ShowMessage(index);
-        }
-        else
-        {
-            // End dialogue
-            HintPopup.Instance?.HideHint(transform);
-
-            // Sit again after conversation
-            if (animator != null)
-                animator.SetBool(sitBool, true);
-        }
-    }
-
-    private void ShowMessage(int idx)
-    {
-        HintPopup.Instance?.ShowHint(
-            "NPC",
-            messages[idx],
-            "Press B to continue",
-            transform
-        );
     }
 
     private void FacePlayer()
