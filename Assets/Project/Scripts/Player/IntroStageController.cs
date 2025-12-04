@@ -56,6 +56,8 @@ public class IntroStageController : MonoBehaviour
     private Vector3 _previousRigPosition;
     
     private GameStateManager _gameStateManager;
+    private bool _isFinished = false;
+    
 
     private void Awake()
     {
@@ -190,7 +192,7 @@ public class IntroStageController : MonoBehaviour
 
     private void ShowPage(int index)
     {
-        if (_pages.Count == 0)
+        if (_pages.Count == 0 || _isFinished)
         {
             return;
         }
@@ -227,7 +229,9 @@ public class IntroStageController : MonoBehaviour
             ShowPage(nextIndex);
         }
         else {
+            _isFinished = true;
             TutorialPopup.Instance?.HideHint(transform);
+            
             
             if (_gameStateManager != null) {
                 _gameStateManager.SetStage(GameStateManager.GameStage.WalkWithDog);

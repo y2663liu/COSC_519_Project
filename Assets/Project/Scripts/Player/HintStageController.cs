@@ -189,7 +189,7 @@ public class HintStageController : MonoBehaviour
 
     private void ShowPage(int index)
     {
-        if (_pages.Count == 0)
+        if (_pages.Count == 0 || _isFinished)
         {
             return;
         }
@@ -204,8 +204,7 @@ public class HintStageController : MonoBehaviour
     
     public void RedisplayCurrentPage()
     {
-        if (_isFinished)
-            return;
+       
         
         ShowPage(_currentPageIndex);
     }
