@@ -5,6 +5,12 @@ The Courtyard Setup scene (located under `Assets/UBCO Courtyard Assets`) deliver
 
 This README documents the current runtime systems, how they work together, and how to reuse every script under `Assets/Scripts` when extending the experience.
 
+## Quick Start
+
+1. Clone or download this repository. Add its root folder in Unity Hub and open it with **Unity 6000.2.7f2**.
+2. Let Unity import the project and resolve its packages. In the **Project** window, open `Assets/UBCO Courtyard Assets/Courtyard Setup.unity`.
+3. Press **Play** to preview the scene. For headset input, use a compatible OpenXR headset and check the XR settings for your target platform.
+
 ## Core Game Flow
 ### GameStateManager (`Assets/Scripts/GameStateManager.cs`)
 * Maintains a singleton (`Instance`) that persists between scene loads (`DontDestroyOnLoad`).
